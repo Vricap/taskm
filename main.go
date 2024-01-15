@@ -1,6 +1,7 @@
 package main
 
 func main() {	
-	InitTask()
+	// InitTask()
 	// getRamInfo()
+	makeTable()
 }
