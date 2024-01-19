@@ -7,12 +7,11 @@ import (
 	"github.com/olekukonko/tablewriter"
 )
 
-func makeTable() {
+func printTable(task []process) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"USER", "PID", "CPU", "MEMORY", "PROGRAM"})
-	taskManager := InitTask()
-	fmt.Printf("Total: %v\n", len(taskManager))
-	for _, val := range taskManager[:50] {
+	fmt.Printf("Total: %v\n", len(task))
+	for _, val := range task[:25] {
 		row := []string{val.USER, fmt.Sprint(val.PID), fmt.Sprintf("%.f%%", val.CPU), fmt.Sprintf("%.f mb", val.MEM), val.PROGRAM}
 		table.Append(row)
 	}

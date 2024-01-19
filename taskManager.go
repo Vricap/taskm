@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"os/exec"
 	"sort"
 	"strconv"
@@ -15,20 +16,27 @@ type process struct {
 	PROGRAM string	
 }
 
-func InitTask() []process {
+func InitTask() {
+	// Clear the terminal first
+	go clearTerminal()
+
+	// Excecute the command to get processes
 	cmd := exec.Command("ps", "aux")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		return nil
+		return
 	}
-	info := parseProcOut(string(output))
-	sort.SliceStable(info, func(i, j int) bool {
-		return info[i].MEM > info[j].MEM
-	}) 
-	// for _, val := range info {
-	// 	fmt.Println(val)
-	// }
-	return info
+
+	// Parse the output from the command to process struct
+	task := parseProcOut(string(output))
+
+	// Sort the process asc based on memory usage
+	sort.SliceStable(task, func(i, j int) bool {
+		return task[i].MEM > task[j].MEM
+	})
+
+	// Print the table containing the processes
+	printTable(task)
 }
 
 func parseProcOut(output string) []process {
@@ -54,4 +62,10 @@ func parseProcOut(output string) []process {
 		processes = append(processes, proc)
 	}
 	return processes
+}
+
+func clearTerminal() {
+	cmd := exec.Command("clear")
+	cmd.Stdout = os.Stdout
+	cmd.Run()
 }

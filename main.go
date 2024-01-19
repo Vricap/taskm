@@ -1,7 +1,20 @@
 package main
 
+import (
+	"time"
+)
+
 func main() {	
-	// InitTask()
-	// getRamInfo()
-	makeTable()
+	InitTask()
+
+	ticker := time.NewTicker(3 * time.Second)
+	defer ticker.Stop()
+
+	go func ()  {
+		for range ticker.C {
+			InitTask()
+		}
+	}()
+
+	select {}
 }
