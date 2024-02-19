@@ -1,20 +1,21 @@
 package main
 
-import (
-	"time"
-)
-
 func main() {	
-	InitTask()
+	getOsInfo()
+	getRamInfo()
+	getProcInfo()
+	getDiskInfo()
 
-	ticker := time.NewTicker(3 * time.Second)
-	defer ticker.Stop()
+	// InitTask()
 
-	go func ()  {
-		for range ticker.C {
-			InitTask()
-		}
-	}()
+	// ticker := time.NewTicker(3 * time.Second)
+	// defer ticker.Stop()
 
-	select {}
+	// go func ()  {
+	// 	for range ticker.C {
+	// 		InitTask()
+	// 	}
+	// }()
+
+	// select {}
 }
