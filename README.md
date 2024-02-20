@@ -27,4 +27,4 @@ NETWORK info
 ![Tux, example](/resource/example6.png)
 
 OTHER info  
-![Tux, example](/reosurce/example7.png)
+![Tux, example](/resource/example7.png)
