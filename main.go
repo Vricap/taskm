@@ -1,25 +1,26 @@
 package main
 
+import (
+	"os"
+	"time"
+)
+
 func main() {	
-	// getOsInfo()
-	// getRamInfo()
-	// getProcInfo()
-	// getDiskInfo()
-	// getNetInfo()
-	// fmt.Println(getUptime())
-	// fmt.Println(getLoginUser())
-	// getGpuInfo()
+	if len(os.Args) > 1 && os.Args[1] == "-v" {
+		printInfoTable()
+		return
+	}
 
-	// InitTask()
+	InitTask()
 
-	// ticker := time.NewTicker(3 * time.Second)
-	// defer ticker.Stop()
+	ticker := time.NewTicker(3 * time.Second)
+	defer ticker.Stop()
 
-	// go func ()  {
-	// 	for range ticker.C {
-	// 		InitTask()
-	// 	}
-	// }()
+	go func ()  {
+		for range ticker.C {
+			InitTask()
+		}
+	}()
 
-	// select {}
+	select {}
 }

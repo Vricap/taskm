@@ -36,7 +36,7 @@ func InitTask() {
 	})
 
 	// Print the table containing the processes
-	printTable(task)
+	printTmTable(task)
 }
 
 func parseProcOut(output string) []process {

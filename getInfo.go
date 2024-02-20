@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -55,14 +56,14 @@ func getProcInfo() map[string]string {
 		if scanner.Text() == "" {
 			break
 		}
-		text := strings.Split(strings.ReplaceAll(scanner.Text(), " ", ""), ":")
-		proc[text[0]] = text[1]
+		text := strings.Split(scanner.Text(), ":")
+		proc[strings.TrimSpace(text[0])] = strings.TrimSpace(text[1])
 	}
 	return proc
 }
 
 func getDiskInfo() [][]string {
-	cmd := exec.Command("df")
+	cmd := exec.Command("df", "-h")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println("Error executing command", err)
@@ -72,12 +73,11 @@ func getDiskInfo() [][]string {
 	outputSlice = outputSlice[:len(outputSlice) - 1]
 	disk := make([][]string, len(outputSlice))
 	for i, val := range outputSlice {
+		regex := regexp.MustCompile(`\s+`)
+		val = regex.ReplaceAllString(val, " ")
 		arr := strings.Split(val, " ")
 		disk[i] = arr
-	}
-	for _, x := range disk {
-		fmt.Println(x)
-	}
+	}	
 	return disk
 }
 
@@ -99,8 +99,8 @@ func getNetInfo() map[string]string {
 			}
 		}
 	}
-	wlNet := net[:y[0]]
-	enNet := net[y[1] + 1:]
+	wlNet := net[y[1] + 1:]
+	enNet := net[:y[0]]
 
 	netInfo := map[string]string{
 		"type": "",
@@ -119,7 +119,7 @@ func getNetInfo() map[string]string {
 		netInfo["netmask"] = attribute[4]
 	} else if strings.Contains(wlNet[1], "inet") {
 		attribute := strings.Split(strings.TrimSpace(wlNet[1]), " ")
-		netInfo["type"] = "Ethernet"
+		netInfo["type"] = "Wifi"
 		netInfo["interface"] = strings.Split(wlNet[0], ":")[0]
 		netInfo["ip"] = attribute[1]
 		netInfo["broadcast"] = attribute[7]
@@ -129,7 +129,7 @@ func getNetInfo() map[string]string {
 	return netInfo
 }
 
-func getUptime() map[string]int {
+func getUptime() map[string]string {
 	data, err := os.ReadFile("/proc/uptime")
 	if err != nil {
 		fmt.Println("Error reading a file", err)
@@ -137,10 +137,10 @@ func getUptime() map[string]int {
 	}
 
 	time, _ := strconv.ParseFloat(strings.Split(string(data), " ")[0], 64)
-	return map[string]int{
-		"hours": int(time) / 3600,
-		"minutes": int(time) % 3600 / 60,
-		"seconds": int(time) % 60,
+	return map[string]string{
+		"hours": fmt.Sprint(int(time) / 3600),
+		"minutes": fmt.Sprint(int(time) % 3600 / 60),
+		"seconds": fmt.Sprint(int(time) % 60),
 	}
 }
 

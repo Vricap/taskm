@@ -7,7 +7,7 @@ import (
 	"github.com/olekukonko/tablewriter"
 )
 
-func printTable(task []process) {
+func printTmTable(task []process) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"USER", "PID", "CPU", "MEMORY", "PROGRAM"})
 	fmt.Printf("Total: %v\n", len(task))
