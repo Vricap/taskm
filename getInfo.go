@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
 )
 
@@ -78,4 +79,83 @@ func getDiskInfo() [][]string {
 		fmt.Println(x)
 	}
 	return disk
+}
+
+func getNetInfo() map[string]string {
+	cmd := exec.Command("ifconfig")
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		fmt.Println("Error executing command", err)
+		return nil
+	}
+
+	net := strings.Split(string(output), "\n")
+	y := []int{}
+	for i, val := range net {
+		if val == "" {
+			y = append(y, i)
+			if len(y) == 2 {
+				break
+			}
+		}
+	}
+	wlNet := net[:y[0]]
+	enNet := net[y[1] + 1:]
+
+	netInfo := map[string]string{
+		"type": "",
+		"interface": "",
+		"ip": "",
+		"broadcast": "",
+		"netmask": "",
+	}
+
+	if strings.Contains(enNet[1], "inet") {
+		attribute := strings.Split(strings.TrimSpace(enNet[1]), " ")
+		netInfo["type"] = "Ethernet"
+		netInfo["interface"] = strings.Split(enNet[0], ":")[0]
+		netInfo["ip"] = attribute[1]
+		netInfo["broadcast"] = attribute[7]
+		netInfo["netmask"] = attribute[4]
+	} else if strings.Contains(wlNet[1], "inet") {
+		attribute := strings.Split(strings.TrimSpace(wlNet[1]), " ")
+		netInfo["type"] = "Ethernet"
+		netInfo["interface"] = strings.Split(wlNet[0], ":")[0]
+		netInfo["ip"] = attribute[1]
+		netInfo["broadcast"] = attribute[7]
+		netInfo["netmask"] = attribute[4]
+	}
+	
+	return netInfo
+}
+
+func getUptime() map[string]int {
+	data, err := os.ReadFile("/proc/uptime")
+	if err != nil {
+		fmt.Println("Error reading a file", err)
+		return nil
+	}
+
+	time, _ := strconv.ParseFloat(strings.Split(string(data), " ")[0], 64)
+	return map[string]int{
+		"hours": int(time) / 3600,
+		"minutes": int(time) % 3600 / 60,
+		"seconds": int(time) % 60,
+	}
+}
+
+func getLoginUser() map[string]string {
+	cmd := exec.Command("who")
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		fmt.Println("Error executing command", err)
+		return nil
+	}	
+
+	user := strings.Split(string(output), " ")
+	return 	map[string]string{
+		"user": user[0],
+		"tty": user[3],
+		"time": strings.TrimSpace(user[len(user) - 2]) + " " + strings.TrimSpace(user[len(user) - 1]),
+	}
 }

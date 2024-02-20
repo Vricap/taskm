@@ -1,10 +1,13 @@
 package main
 
 func main() {	
-	getOsInfo()
-	getRamInfo()
-	getProcInfo()
-	getDiskInfo()
+	// getOsInfo()
+	// getRamInfo()
+	// getProcInfo()
+	// getDiskInfo()
+	// getNetInfo()
+	// fmt.Println(getUptime())
+	// fmt.Println(getLoginUser())
 
 	// InitTask()
 
