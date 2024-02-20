@@ -159,3 +159,14 @@ func getLoginUser() map[string]string {
 		"time": strings.TrimSpace(user[len(user) - 2]) + " " + strings.TrimSpace(user[len(user) - 1]),
 	}
 }
+
+func getGpuInfo() string {
+	cmd := exec.Command("sh", "-c", "lspci | grep -iE 'vga|3d|2d'")
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		fmt.Println("Error executing command", err)
+		return ""
+	}
+	
+	return strings.TrimSpace(string(output))
+}

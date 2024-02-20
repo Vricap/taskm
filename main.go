@@ -8,6 +8,7 @@ func main() {
 	// getNetInfo()
 	// fmt.Println(getUptime())
 	// fmt.Println(getLoginUser())
+	// getGpuInfo()
 
 	// InitTask()
 
