@@ -2,9 +2,10 @@
 
 A program to see running process and overview of a computer.  
 ![Tux, the Linux mascot](/resource/example1.png)  
-Will order top 25 by memory usage. And will refresh every 3 seconds.
+Will order top 25 by memory usage. And will refresh every 3 seconds.  
+Kill or set prority of a process is not yet implemented.  
 
-put `-v` to see overview of informatin about computer.
+Put `-v` to see overview of informatin about computer.
 
 ```
 $ taskm -v
