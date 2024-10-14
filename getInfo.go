@@ -82,6 +82,7 @@ func getDiskInfo() [][]string {
 }
 
 func getNetInfo() map[string]string {
+	// FIXME: somehow if you had docker installed, that is considered an connection
 	cmd := exec.Command("ifconfig")
 	output, err := cmd.CombinedOutput()
 	if err != nil {

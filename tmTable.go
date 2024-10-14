@@ -10,6 +10,7 @@ import (
 func printTmTable(task []process) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"USER", "PID", "CPU", "MEMORY", "PROGRAM"})
+	fmt.Printf("Ordered based on memory usage. \n")
 	fmt.Printf("Total: %v\n", len(task))
 	for _, val := range task[:25] {
 		row := []string{val.USER, fmt.Sprint(val.PID), fmt.Sprintf("%.f%%", val.CPU), fmt.Sprintf("%.f mb", val.MEM), val.PROGRAM}
